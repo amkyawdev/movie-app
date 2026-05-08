@@ -162,7 +162,12 @@
         appShell.style.opacity = '0';
         appShell.style.animation = 'fadeIn 0.4s ease forwards';
         initApp();
-        if (typeof ResponsiveMenu !== 'undefined') ResponsiveMenu.init();
+        // Reset and re-initialize ResponsiveMenu after app shell is visible
+        // (DOMContentLoaded may have run before elements were accessible)
+        if (typeof ResponsiveMenu !== 'undefined') {
+          ResponsiveMenu._initialized = false;  // Allow re-init now that appShell is visible
+          ResponsiveMenu.init();
+        }
       }, 400);
     }
 
