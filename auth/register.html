@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>Create Account — Burme Movies</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../css/main.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="../server/firebaseConfig.js"></script>
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-card slide-in-right">
+    <div class="auth-logo">
+      <svg width="48" height="48" viewBox="0 0 80 80" fill="none" style="margin:0 auto 8px">
+        <rect width="80" height="80" rx="18" fill="#FFB800"/>
+        <rect x="10" y="22" width="60" height="36" rx="4" fill="#0a0a0a"/>
+        <circle cx="40" cy="40" r="10" fill="#FFB800"/>
+        <polygon points="37,36 37,44 47,40" fill="#0a0a0a"/>
+      </svg>
+      <h1 style="font-family:'Bebas Neue',cursive;font-size:1.6rem;color:#FFB800;letter-spacing:0.1em">JOIN BURME</h1>
+      <p>Create your free account</p>
+    </div>
+
+    <div class="form-error" id="registerError"></div>
+
+    <form id="registerForm" onsubmit="handleRegister(event)">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <div class="form-input-wrapper">
+          <input type="text" id="regName" class="form-input" 
+            placeholder="Your name" required autocomplete="name">
+          <i class="bi bi-person form-input-icon" style="pointer-events:none"></i>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <div class="form-input-wrapper">
+          <input type="email" id="regEmail" class="form-input" 
+            placeholder="you@example.com" required autocomplete="email">
+          <i class="bi bi-envelope form-input-icon" style="pointer-events:none"></i>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <div class="form-input-wrapper">
+          <input type="password" id="regPassword" class="form-input" 
+            placeholder="Min. 6 characters" required minlength="6" autocomplete="new-password">
+          <i class="bi bi-eye form-input-icon" id="toggleRegPw"
+             onclick="togglePasswordVisibility('regPassword','toggleRegPw')"></i>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <div class="form-input-wrapper">
+          <input type="password" id="regConfirm" class="form-input" 
+            placeholder="Re-enter password" required autocomplete="new-password">
+          <i class="bi bi-eye form-input-icon" id="toggleConfirmPw"
+             onclick="togglePasswordVisibility('regConfirm','toggleConfirmPw')"></i>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-gold" id="registerBtn" 
+        style="width:100%;justify-content:center;margin-top:8px;color:#0a0a0a">
+        <i class="bi bi-person-plus-fill"></i> Create Account
+      </button>
+    </form>
+
+    <div class="divider"><span>or</span></div>
+
+    <button class="btn-google" onclick="handleGoogleRegister()">
+      <svg width="18" height="18" viewBox="0 0 18 18">
+        <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+        <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
+        <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+      </svg>
+      Sign up with Google
+    </button>
+
+    <div class="auth-footer">
+      Already have an account? <a href="login.html">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<script src="../js/auth.js"></script>
+<script>
+  if (typeof firebase !== 'undefined' && firebase.apps.length) {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) window.location.href = '../index.html';
+    });
+  }
+
+  async function handleRegister(e) {
+    e.preventDefault();
+    hideError('registerError');
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pw = document.getElementById('regPassword').value;
+    const confirm = document.getElementById('regConfirm').value;
+    if (pw !== confirm) { showError('registerError', 'Passwords do not match.'); return; }
+    setLoading('registerBtn', true);
+    const result = await registerWithEmail(email, pw, name);
+    if (result.error) { showError('registerError', result.error); setLoading('registerBtn', false); }
+    else window.location.href = '../index.html';
+  }
+
+  async function handleGoogleRegister() {
+    hideError('registerError');
+    const result = await loginWithGoogle();
+    if (result.error) showError('registerError', result.error);
+    else window.location.href = '../index.html';
+  }
+</script>
+</body>
+</html>
