@@ -1,0 +1,47 @@
+<!-- BURME MOVIES - Movie Card Component Template -->
+<!-- This is a REFERENCE TEMPLATE — cards are generated dynamically via createMovieCard() in app.js -->
+<!-- 
+Usage in JavaScript:
+  const card = createMovieCard(movieObject);
+  container.innerHTML += card;
+
+Movie Object Structure:
+  {
+    id: number,
+    title: string,          // English title
+    titleMM: string,        // Burmese title
+    year: number,
+    genre: string[],        // Array of genres
+    rating: number,         // Out of 10
+    duration: string,       // e.g. "1h 54m"
+    poster: string,         // URL to poster image (2:3 ratio)
+    backdrop: string,       // URL to backdrop image (16:9 ratio)
+    description: string,    // Movie synopsis
+    isFeatured: boolean,    // Show in hero banner
+    isNew: boolean,         // Show "New" badge
+  }
+-->
+
+<div class="movie-card" onclick="navigateTo('movie-detail', {id: MOVIE_ID})">
+  <img class="movie-card-poster" src="POSTER_URL" alt="TITLE" loading="lazy">
+  <!-- Fallback if image fails -->
+  <div class="movie-card-poster-placeholder" style="display:none">
+    <i class="bi bi-film"></i>
+  </div>
+  <!-- New badge (conditional) -->
+  <span class="movie-card-badge">New</span>
+  <!-- Watchlist button -->
+  <button class="movie-card-watchlist-btn" data-id="MOVIE_ID"
+    onclick="event.stopPropagation(); toggleWatchlist(MOVIE_ID)">
+    <i class="bi bi-bookmark"></i>
+  </button>
+  <!-- Info overlay -->
+  <div class="movie-card-overlay">
+    <div class="movie-card-title">TITLE</div>
+    <div class="movie-card-meta">
+      <span class="movie-card-rating"><i class="bi bi-star-fill"></i> RATING</span>
+      <span>•</span>
+      <span>YEAR</span>
+    </div>
+  </div>
+</div>
