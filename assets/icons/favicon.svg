@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80">
+  <rect width="80" height="80" rx="18" fill="#FFB800"/>
+  <rect x="10" y="22" width="60" height="36" rx="4" fill="#0a0a0a"/>
+  <circle cx="40" cy="40" r="10" fill="#FFB800"/>
+  <polygon points="37,36 37,44 47,40" fill="#0a0a0a"/>
+  <rect x="10" y="22" width="4" height="36" fill="#FFB800" opacity="0.4"/>
+  <rect x="66" y="22" width="4" height="36" fill="#FFB800" opacity="0.4"/>
+  <rect x="10" y="22" width="60" height="4" fill="#FFB800" opacity="0.2"/>
+  <rect x="10" y="54" width="60" height="4" fill="#FFB800" opacity="0.2"/>
+  <rect x="10" y="31" width="4" height="3" fill="#FFB800" opacity="0.6"/>
+  <rect x="10" y="37" width="4" height="3" fill="#FFB800" opacity="0.6"/>
+  <rect x="10" y="43" width="4" height="3" fill="#FFB800" opacity="0.6"/>
+  <rect x="10" y="49" width="4" height="3" fill="#FFB800" opacity="0.6"/>
+  <rect x="66" y="31" width="4" height="3" fill="#FFB800" opacity="0.6"/>
+  <rect x="66" y="37" width="4" height="3" fill="#FFB800" opacity="0.6"/>
+  <rect x="66" y="43" width="4" height="3" fill="#FFB800" opacity="0.6"/>
+  <rect x="66" y="49" width="4" height="3" fill="#FFB800" opacity="0.6"/>
+</svg>
