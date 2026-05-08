@@ -1,0 +1,31 @@
+<!-- BURME MOVIES - Desktop Sidebar Component -->
+<!-- Include via: <div w3-include-html="components/desktop-sidebar.html"></div> -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar navigation">
+  <div class="sidebar-logo">BURME<span> MOVIES</span></div>
+  <nav class="sidebar-nav">
+    <a data-page="home" onclick="navigateTo('home')">
+      <i class="bi bi-house-fill"></i> Home
+    </a>
+    <a data-page="search" onclick="navigateTo('search')">
+      <i class="bi bi-search"></i> Search
+    </a>
+    <a data-page="watchlist" onclick="navigateTo('watchlist')">
+      <i class="bi bi-bookmark-heart-fill"></i> Watchlist
+    </a>
+    <a data-page="profile" onclick="navigateTo('profile')">
+      <i class="bi bi-person-fill"></i> Profile
+    </a>
+    <div style="margin: 16px 0; border-top: 1px solid var(--border)"></div>
+    <a href="#" onclick="event.preventDefault()">
+      <i class="bi bi-info-circle"></i> About
+    </a>
+    <a href="#" onclick="event.preventDefault()">
+      <i class="bi bi-chat-dots"></i> Feedback
+    </a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div style="font-size:0.7rem;color:#6B7280;margin-bottom:4px">Burme Movies v1.0.0</div>
+    <div style="font-size:0.65rem;color:#444">Made with ❤️ for Myanmar</div>
+  </div>
+</aside>
