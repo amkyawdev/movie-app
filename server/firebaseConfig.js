@@ -1,38 +1,34 @@
 /* ===============================================
    BURME MOVIE APP — FIREBASE CONFIGURATION
-   ===============================================
-   
-   SETUP INSTRUCTIONS:
-   1. Go to https://console.firebase.google.com
-   2. Create a new project (or use existing)
-   3. Add a Web App in Project Settings
-   4. Copy the firebaseConfig object below
-   5. Enable Authentication → Email/Password + Google
-   6. Enable Firestore Database
-   
+   Project: amk-apk
    =============================================== */
 
 const firebaseConfig = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID",
-  measurementId:     "YOUR_MEASUREMENT_ID"
+  apiKey:            "AIzaSyCcw0_7Pc4tIAapg-Hyvk4UtiQfo1USjU8",
+  authDomain:        "amk-apk.firebaseapp.com",
+  databaseURL:       "https://amk-apk-default-rtdb.firebaseio.com",
+  projectId:         "amk-apk",
+  storageBucket:     "amk-apk.firebasestorage.app",
+  messagingSenderId: "267632318274",
+  appId:             "1:267632318274:android:441e4b8cb66da60d04dadb",
+  measurementId:     "G-E2658JJ29R"
 };
 
-// Initialize Firebase (only if not already initialized)
+// Initialize Firebase (safe to call multiple times)
 if (typeof firebase !== 'undefined') {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
+  // Firestore
   window.db = firebase.firestore();
+  // Realtime Database
+  if (firebase.database) {
+    window.rtdb = firebase.database();
+  }
 }
 
 // ---- FIRESTORE HELPERS ----
 
-// Save to watchlist in Firestore
 async function firestoreAddToWatchlist(userId, movieId) {
   if (!window.db) return;
   try {
@@ -40,36 +36,34 @@ async function firestoreAddToWatchlist(userId, movieId) {
       movies: firebase.firestore.FieldValue.arrayUnion(movieId),
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge: true });
-  } catch (e) { console.warn('Firestore error:', e); }
+  } catch (e) { console.warn('[Firestore] watchlist add error:', e.message); }
 }
 
-// Remove from watchlist in Firestore
 async function firestoreRemoveFromWatchlist(userId, movieId) {
   if (!window.db) return;
   try {
     await window.db.collection('watchlists').doc(userId).update({
       movies: firebase.firestore.FieldValue.arrayRemove(movieId)
     });
-  } catch (e) { console.warn('Firestore error:', e); }
+  } catch (e) { console.warn('[Firestore] watchlist remove error:', e.message); }
 }
 
-// Get watchlist from Firestore
 async function firestoreGetWatchlist(userId) {
   if (!window.db) return [];
   try {
     const doc = await window.db.collection('watchlists').doc(userId).get();
     return doc.exists ? (doc.data().movies || []) : [];
-  } catch (e) { console.warn('Firestore error:', e); return []; }
+  } catch (e) { console.warn('[Firestore] get watchlist error:', e.message); return []; }
 }
 
-// Save watch history
-async function firestoreSaveHistory(userId, movieId) {
-  if (!window.db) return;
+async function firestoreSyncWatchlist() {
+  const user = window._authUser;
+  if (!user || !window.db) return;
   try {
-    await window.db.collection('history').doc(userId).set({
-      movies: firebase.firestore.FieldValue.arrayUnion({
-        id: movieId, watchedAt: new Date().toISOString()
-      })
-    }, { merge: true });
-  } catch (e) { console.warn('Firestore error:', e); }
+    const cloudList = await firestoreGetWatchlist(user.uid);
+    if (cloudList.length > 0) {
+      window.AppState.watchlist = cloudList;
+      localStorage.setItem('burme_watchlist', JSON.stringify(cloudList));
+    }
+  } catch (e) { console.warn('[Firestore] sync error:', e.message); }
 }
