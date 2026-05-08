@@ -5,26 +5,16 @@
   "author": "amkyawdev",
   "license": "MIT",
   "private": true,
-  "main": "index.html",
   "scripts": {
     "start": "npx serve . --single --listen 3000",
     "dev":   "npx live-server . --port=3000 --open=index.html",
-    "build": "npx tailwindcss -i css/main.css -o css/main.min.css --minify",
-    "lint":  "npx eslint js/*.js"
-  },
-  "dependencies": {
-    "firebase": "^9.23.0"
+    "build": "npx tailwindcss -i css/main.css -o css/main.min.css --minify"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.0",
-    "eslint": "^8.56.0",
     "live-server": "^1.2.2",
     "serve": "^14.2.1"
   },
-  "keywords": [
-    "myanmar", "burmese", "movies", "streaming", "pwa", "firebase", "mega"
-  ],
-  "engines": {
-    "node": ">=18.0.0"
-  }
+  "keywords": ["myanmar", "burmese", "movies", "streaming", "pwa", "firebase"],
+  "engines": { "node": ">=18.0.0" }
 }
